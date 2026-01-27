@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+//import 'package:webview_flutter/webview_flutter.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -71,7 +73,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     title: Text(
                       "Használati útmutató",
                       style: TextStyle(fontSize: 20),
-                      // Added to prevent text overflow in case of limited horizontal space.
                       overflow: TextOverflow.ellipsis, 
                       maxLines: 1, 
                     ),
@@ -104,7 +105,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     title: Text(
                       "Egészségügyi álhírfelismerő alkalmazás",
                       style: TextStyle(fontSize: 20),
-                      // Added to prevent text overflow in case of limited horizontal space.
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                     ),
@@ -146,13 +146,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       TextField(
                         controller: feedbackController,
                               keyboardType: TextInputType.multiline,
-                              maxLines: null, // Allows for an unlimited number of lines
-                              minLines: 8, // Sets an initial height of 8 lines
+                              maxLines: null,
+                              minLines: 8,
                               decoration: const InputDecoration(
                                 border: OutlineInputBorder(),
                                 labelText: 'Szöveg bevitele',
                                 hintText: 'Írja be vagy illessze be ide a megvizsgálandó szöveget',
-                                alignLabelWithHint: true, // Centers the label text vertically with the hint text
+                                alignLabelWithHint: true,
                               ),
                       ),
 
@@ -189,7 +189,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
                       // -------- PROGRESS BAR --------
                       LinearProgressIndicator(
-                        // Fixed invalid value. value must be between 0.0 and 1.0.
                         value: 0.0, 
                         minHeight: 20,
                         backgroundColor: Colors.grey[300],
@@ -209,7 +208,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     title: Text(
                       "Feldolgozott szöveg",
                       style: TextStyle(fontSize: 20),
-                      // Added to prevent text overflow in case of limited horizontal space.
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                     ),
@@ -232,7 +230,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     title: Text(
                       "Visszajelzés küldése a felismerésről",
                       style: TextStyle(fontSize: 20),
-                      // Added to prevent text overflow in case of limited horizontal space.
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                     ),

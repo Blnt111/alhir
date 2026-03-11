@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 //import 'package:webview_flutter/webview_flutter.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 
 void main() {
@@ -28,6 +30,41 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   List<bool> isOpen = [false, false, false, false];
   final TextEditingController feedbackController = TextEditingController();
+
+  double prediction = 0.0;
+  bool isLoading = false;
+
+
+  Future<void> detectText() async {
+    final url = Uri.parse("http://www.inf.u-szeged.hu/~gencsi/static/classify.php");
+
+
+    try {
+      final response = await http.post(
+        url,
+        body: {
+          "text": feedbackController.text,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+
+        double score = data[1]["score"] * 100;
+
+        setState(() {
+          prediction = score / 100;
+        });
+
+      } else {
+        debugPrint("Server error: ${response.statusCode}");
+      }
+    } catch (e) {
+      debugPrint("POST error: $e");
+    }
+
+  }
+
 
   
   @override
@@ -162,7 +199,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Center(
                         child: ElevatedButton(
                           onPressed: () {
-                            debugPrint('Visszajelzés: ${feedbackController.text}');
+                            detectText();
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.red,
@@ -189,10 +226,27 @@ class _HomeScreenState extends State<HomeScreen> {
 
                       // -------- PROGRESS BAR --------
                       LinearProgressIndicator(
-                        value: 0.0, 
+                        value: prediction, 
                         minHeight: 20,
                         backgroundColor: Colors.grey[300],
-                        color: Colors.red,
+                        color: prediction > 0.5 ? Colors.red : Colors.green,
+                      ),
+
+                      const SizedBox(height: 10),
+
+                      // -------- EREDMÉNY SZÖVEG --------
+
+                      Text(
+                        prediction == 0
+                            ? "Nincs eredmény"
+                            : prediction > 0.5
+                                ? "Álhír"
+                                : "Valós hír",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: prediction > 0.5 ? Colors.red : Colors.green,
+                        ),
                       ),
                     ],
                   ),

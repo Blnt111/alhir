@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-//import 'package:webview_flutter/webview_flutter.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -30,6 +30,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   List<bool> isOpen = [false, false, false, false];
   final TextEditingController feedbackController = TextEditingController();
+
+  late final WebViewController docsController;
 
   double prediction = 0.0;
   bool isLoading = false;
@@ -65,6 +67,19 @@ class _HomeScreenState extends State<HomeScreen> {
 
   }
 
+
+  @override
+  void initState() {
+    super.initState();
+
+    docsController = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..loadRequest(
+        Uri.parse(
+          "https://docs.google.com/forms/d/e/1FAIpQLSf5iT4D0cMqS5F0Hk3uBWkDZQlr_ThAZozmTNxKy9rUzUtAQw/viewform?embedded=true",
+        ),
+      );
+  }
 
   
   @override
@@ -289,11 +304,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   );
                 },
-                body: const Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Text(
-                    "Ide jön a negyedik panel tartalma.",
-                    style: TextStyle(fontSize: 16),
+                body: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: SizedBox(
+                    height: 1500,
+                    child: WebViewWidget(controller: docsController),
                   ),
                 ),
               ),
